@@ -1,0 +1,37 @@
+Benchmark Results
+=================
+Algorithm: backtracking.cpp
+Execution Time: 0.624782 seconds
+Memory Usage: 4844 KB
+Minimum cost: 90
+-------------------------------------
+Algorithm: bitmask_dp.cpp
+Execution Time: 0.817725 seconds
+Memory Usage: 4956 KB
+Minimum cost: 90
+-------------------------------------
+Algorithm: branch_n_bound.cpp
+Execution Time: 1.0128 seconds
+Memory Usage: 4956 KB
+Minimum cost: 145
+-------------------------------------
+Algorithm: dp.cpp
+Execution Time: 0.661948 seconds
+Memory Usage: 4956 KB
+Minimum cost: 90
+-------------------------------------
+Algorithm: hungarian.cpp
+Execution Time: 0.782738 seconds
+Memory Usage: 4956 KB
+Minimum cost: 0
+-------------------------------------
+Algorithm: mst.cpp
+Execution Time: 0.889292 seconds
+Memory Usage: 4956 KB
+Minimum cost: 130
+-------------------------------------
+Algorithm: reduced_matrix.cpp
+Execution Time: 0.827809 seconds
+Memory Usage: 4956 KB
+Minimum cost: 155
+-------------------------------------

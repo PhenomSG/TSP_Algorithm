@@ -5,17 +5,13 @@
 
 using namespace std;
 
-const int N = 6; // Number of cities
+const int N = 4; // Number of cities
 int dist[N][N] = {
-    {0, 10, 15, 20, 25, 30},
-    {10, 0, 35, 25, 30, 15},
-    {15, 35, 0, 30, 20, 25},
-    {20, 25, 30, 0, 10, 5},
-    {25, 30, 20, 10, 0, 15},
-    {30, 15, 25, 5, 15, 0}
+    {0, 10, 15, 20},
+    {10, 0, 35, 25},
+    {15, 35, 0, 30},
+    {20, 25, 30, 0}
 };
-
-
 
 int primMST() {
     vector<int> key(N, INT_MAX);
@@ -47,6 +43,6 @@ int primMST() {
 }
 
 int main() {
-    cout << "Approximate cost: " << 2 * primMST() << endl;
+    cout << "Minimum cost: " << 2 * primMST() << endl;
     return 0;
 }

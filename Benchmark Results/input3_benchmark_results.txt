@@ -28,7 +28,7 @@ Minimum cost: 0
 Algorithm: mst.cpp
 Execution Time: 1.62029 seconds
 Memory Usage: 4948 KB
-Approximate cost: 110
+Minimum cost: 110
 -------------------------------------
 Algorithm: reduced_matrix.cpp
 Execution Time: 1.53412 seconds
