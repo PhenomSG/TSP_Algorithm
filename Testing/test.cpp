@@ -7,6 +7,7 @@
 #include <array>
 #include <cstdlib>
 #include <cstring>
+#include <sstream>
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
@@ -42,28 +43,31 @@ size_t getCurrentMemoryUsage() {
 }
 
 // Function to benchmark a TSP algorithm
-void benchmark(const std::string& file, const std::string& inputFile, const std::string& outputFile, const std::string& qualityFile) {
+void benchmark(const std::string& file) {
     auto start = std::chrono::high_resolution_clock::now();
 
-    // Compile and run the algorithm
-    std::string command = "g++ -o algorithm " + file + " && ./algorithm < " + inputFile + " > " + outputFile;
-    std::system(command.c_str());
+    // Determine the correct command to compile and run the algorithm based on the OS
+    std::string command;
+#if defined(_WIN32) || defined(_WIN64)
+    command = "g++ -o algorithm " + file + " && algorithm";
+#else
+    command = "g++ -o algorithm " + file + " && ./algorithm";
+#endif
+
+    std::string output = exec(command.c_str());
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
 
     size_t memoryUsage = getCurrentMemoryUsage();
 
-    // Read solution quality and path from output file
-    std::ifstream qualityStream(outputFile);
-    std::string line;
+    // Extract solution quality from output
     std::string solutionQuality;
-    std::string solutionPath;
-    while (std::getline(qualityStream, line)) {
+    std::istringstream outputStream(output);
+    std::string line;
+    while (std::getline(outputStream, line)) {
         if (line.find("Minimum cost:") != std::string::npos) {
             solutionQuality = line;
-        } else if (line.find("Path:") != std::string::npos) {
-            solutionPath = line;
         }
     }
 
@@ -73,7 +77,6 @@ void benchmark(const std::string& file, const std::string& inputFile, const std:
     logFile << "Execution Time: " << duration.count() << " seconds\n";
     logFile << "Memory Usage: " << memoryUsage << " KB\n";
     logFile << solutionQuality << "\n";
-    logFile << solutionPath << "\n";
     logFile << "-------------------------------------\n";
     logFile.close();
 }
@@ -89,10 +92,6 @@ int main() {
         "reduced_matrix.cpp"
     };
 
-    std::string inputFile = "input.txt";
-    std::string outputFile = "output.txt";
-    std::string qualityFile = "quality.txt";
-
     // Clear previous results
     std::ofstream logFile("benchmark_results.txt");
     logFile << "Benchmark Results\n";
@@ -100,7 +99,7 @@ int main() {
     logFile.close();
 
     for (const auto& file : files) {
-        benchmark(file, inputFile, outputFile, qualityFile);
+        benchmark(file);
     }
 
     std::cout << "Benchmarking completed. Results are in benchmark_results.txt" << std::endl;
