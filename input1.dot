@@ -1,0 +1,26 @@
+digraph G {
+    label="Distance Matrix for TSP"
+    labelloc=top
+    labeljust=center
+
+    // Nodes representing cities
+    node [shape=circle]
+    A [label="City 1"]
+    B [label="City 2"]
+    C [label="City 3"]
+    D [label="City 4"]
+
+    // Edges representing distances between cities
+    A -> B [label="10"]
+    A -> C [label="15"]
+    A -> D [label="20"]
+    B -> A [label="10"]
+    B -> C [label="35"]
+    B -> D [label="25"]
+    C -> A [label="15"]
+    C -> B [label="35"]
+    C -> D [label="30"]
+    D -> A [label="20"]
+    D -> B [label="25"]
+    D -> C [label="30"]
+}
