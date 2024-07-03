@@ -40,7 +40,47 @@ We benchmark the performance of each approach using various datasets to evaluate
 - **Memory Usage:** The amount of memory consumed during computation.
 - **Solution Quality:** The optimality of the solution found (distance or cost).
 
-### Results
+## Benchmark Results
+
+Here are the benchmark results for various TSP solution approaches:
+
+- **Backtracking Algorithm**
+  - **Execution Time:** 0.714656 seconds
+  - **Memory Usage:** 4848 KB
+  - **Minimum Cost:** 80
+
+- **Bitmasking and Dynamic Programming**
+  - **Execution Time:** 0.737326 seconds
+  - **Memory Usage:** 4968 KB
+  - **Minimum Cost:** 80
+
+- **Branch and Bound**
+  - **Execution Time:** 1.08067 seconds
+  - **Memory Usage:** 4968 KB
+  - **Minimum Cost:** 135
+
+- **Dynamic Programming**
+  - **Execution Time:** 0.714453 seconds
+  - **Memory Usage:** 4968 KB
+  - **Minimum Cost:** 80
+
+- **Hungarian Method**
+  - **Execution Time:** 0.826416 seconds
+  - **Memory Usage:** 4968 KB
+  - **Minimum Cost:** 0
+
+- **Minimum Spanning Tree (MST)**
+  - **Execution Time:** 1.02653 seconds
+  - **Memory Usage:** 4968 KB
+
+- **Reduced Matrix Method**
+  - **Execution Time:** 0.907802 seconds
+  - **Memory Usage:** 4968 KB
+  - **Minimum Cost:** 95
+
+Each algorithm was tested on a standard set of TSP instances to evaluate its performance in terms of execution time, memory usage, and solution quality.
+
+## Results
 After extensive benchmarking, the best-performing methods in terms of execution time and solution quality are:
 
 1. **Bitmasking and Dynamic Programming:** Provides an optimal solution for small to medium-sized instances efficiently.
