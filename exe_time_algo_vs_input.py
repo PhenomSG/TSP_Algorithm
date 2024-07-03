@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 
-# Data for execution times (seconds) for each algorithm and each input
 algorithms = [
     "backtracking.cpp",
     "bitmask_dp.cpp",
@@ -21,25 +20,18 @@ execution_times = {
     "reduced_matrix.cpp": [0.801222, 1.53412, 0.827809, 1.08901]
 }
 
-# Inputs
 inputs = ['Input 2', 'Input 3', 'Input 4', 'Input 5']
 
-# Create figure and axes
 fig, ax = plt.subplots(figsize=(12, 8))
 
-# Plot each algorithm's execution times
 for alg in algorithms:
     ax.plot(inputs, execution_times[alg], marker='o', label=alg)
 
-# Set labels and title
 ax.set_xlabel('Inputs')
 ax.set_ylabel('Execution Time (seconds)')
 ax.set_title('Execution Time vs Inputs for Different Algorithms')
 ax.grid(True)
 ax.legend()
 
-# Save the plot
 plt.savefig('execution_time_vs_inputs.png')
-
-# Display the plot
 plt.show()
