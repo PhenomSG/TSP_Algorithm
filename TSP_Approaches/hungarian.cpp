@@ -15,15 +15,18 @@ int dist[N][N] = {
 };
 
 int hungarian() {
-    vector<int> u(N, 0), v(N, 0), p(N, 0), way(N, 0);
+    vector<int> u(N, 0), v(N, INF), p(N), way(N);
+
     for (int i = 1; i < N; ++i) {
         p[0] = i;
         int j0 = 0;
         vector<int> minv(N, INF);
         vector<bool> used(N, false);
+
         do {
             used[j0] = true;
             int i0 = p[j0], delta = INF, j1;
+
             for (int j = 1; j < N; ++j) {
                 if (!used[j]) {
                     int cur = dist[i0][j] - u[i0] - v[j];
@@ -37,6 +40,7 @@ int hungarian() {
                     }
                 }
             }
+
             for (int j = 0; j < N; ++j) {
                 if (used[j]) {
                     u[p[j]] += delta;
@@ -47,13 +51,15 @@ int hungarian() {
             }
             j0 = j1;
         } while (p[j0] != 0);
+
         do {
             int j1 = way[j0];
             p[j0] = p[j1];
             j0 = j1;
         } while (j0);
     }
-    return -v[0];
+
+    return -v[0]; // Return the minimum cost found
 }
 
 int main() {

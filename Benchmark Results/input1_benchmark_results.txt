@@ -23,7 +23,7 @@ Minimum cost: 80
 Algorithm: hungarian.cpp
 Execution Time: 0.826416 seconds
 Memory Usage: 4968 KB
-Minimum cost: 0
+Minimum cost: 4
 -------------------------------------
 Algorithm: mst.cpp
 Execution Time: 1.02653 seconds
