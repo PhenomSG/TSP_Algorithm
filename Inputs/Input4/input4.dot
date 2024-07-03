@@ -1,0 +1,65 @@
+digraph G {
+    label="Distance Matrix for TSP"
+    labelloc=top
+    labeljust=center
+
+    // Nodes representing cities
+    node [shape=circle]
+    A [label="City 1"]
+    B [label="City 2"]
+    C [label="City 3"]
+    D [label="City 4"]
+    E [label="City 5"]
+    F [label="City 6"]
+    G [label="City 7"]
+
+    // Edges representing distances between cities
+    A -> B [label="10"]
+    A -> C [label="15"]
+    A -> D [label="20"]
+    A -> E [label="25"]
+    A -> F [label="30"]
+    A -> G [label="35"]
+
+    B -> A [label="10"]
+    B -> C [label="35"]
+    B -> D [label="25"]
+    B -> E [label="30"]
+    B -> F [label="15"]
+    B -> G [label="20"]
+
+    C -> A [label="15"]
+    C -> B [label="35"]
+    C -> D [label="30"]
+    C -> E [label="20"]
+    C -> F [label="25"]
+    C -> G [label="10"]
+
+    D -> A [label="20"]
+    D -> B [label="25"]
+    D -> C [label="30"]
+    D -> E [label="10"]
+    D -> F [label="5"]
+    D -> G [label="15"]
+
+    E -> A [label="25"]
+    E -> B [label="30"]
+    E -> C [label="20"]
+    E -> D [label="10"]
+    E -> F [label="15"]
+    E -> G [label="25"]
+
+    F -> A [label="30"]
+    F -> B [label="15"]
+    F -> C [label="25"]
+    F -> D [label="5"]
+    F -> E [label="15"]
+    F -> G [label="20"]
+
+    G -> A [label="35"]
+    G -> B [label="20"]
+    G -> C [label="10"]
+    G -> D [label="15"]
+    G -> E [label="25"]
+    G -> F [label="20"]
+}
