@@ -1,44 +1,37 @@
 Benchmark Results
 =================
-Algorithm: backtracking.cpp
-Execution Time: 0.639309 seconds
-Memory Usage: 4868 KB
-
-
+Algorithm: E:TSP_AlgorithmTestingacktracking.cpp
+Execution Time: 0.0519553 seconds
+Memory Usage: 4824 KB
+Solution Quality: 
 -------------------------------------
 Algorithm: bitmask_dp.cpp
-Execution Time: 0.649541 seconds
-Memory Usage: 4980 KB
-
-
+Execution Time: 0.667165 seconds
+Memory Usage: 4924 KB
+Solution Quality: 
 -------------------------------------
 Algorithm: branch_n_bound.cpp
-Execution Time: 0.923707 seconds
-Memory Usage: 4980 KB
-
-
+Execution Time: 0.950214 seconds
+Memory Usage: 4932 KB
+Solution Quality: 
 -------------------------------------
 Algorithm: dp.cpp
-Execution Time: 0.663918 seconds
-Memory Usage: 4980 KB
-
-
+Execution Time: 0.675412 seconds
+Memory Usage: 4932 KB
+Solution Quality: 
 -------------------------------------
 Algorithm: hungarian.cpp
-Execution Time: 0.717271 seconds
-Memory Usage: 4980 KB
-
-
+Execution Time: 0.73236 seconds
+Memory Usage: 4932 KB
+Solution Quality: 
 -------------------------------------
 Algorithm: mst.cpp
-Execution Time: 0.842463 seconds
-Memory Usage: 4980 KB
-
-
+Execution Time: 0.780642 seconds
+Memory Usage: 4932 KB
+Solution Quality: 
 -------------------------------------
 Algorithm: reduced_matrix.cpp
-Execution Time: 0.905324 seconds
-Memory Usage: 4980 KB
-
-
+Execution Time: 0.86924 seconds
+Memory Usage: 4932 KB
+Solution Quality: 
 -------------------------------------
