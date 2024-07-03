@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <climits>
+#include <algorithm>
 
 using namespace std;
 
@@ -13,22 +14,15 @@ int dist[N][N] = {
     {20, 25, 30, 0}
 };
 
-int reduceMatrix(int costMatrix[N][N]) {
+int reduceMatrix(int costMatrix[N][N], int rowReduction[N], int colReduction[N]) {
     int cost = 0;
 
     for (int i = 0; i < N; i++) {
-        int rowMin = INT_MAX;
+        rowReduction[i] = *min_element(costMatrix[i], costMatrix[i] + N);
+        cost += rowReduction[i];
         for (int j = 0; j < N; j++) {
-            if (costMatrix[i][j] < rowMin) {
-                rowMin = costMatrix[i][j];
-            }
-        }
-        if (rowMin != INT_MAX) {
-            cost += rowMin;
-            for (int j = 0; j < N; j++) {
-                if (costMatrix[i][j] != INT_MAX) {
-                    costMatrix[i][j] -= rowMin;
-                }
+            if (costMatrix[i][j] != INT_MAX && rowReduction[i] != INT_MAX) {
+                costMatrix[i][j] -= rowReduction[i];
             }
         }
     }
@@ -40,12 +34,11 @@ int reduceMatrix(int costMatrix[N][N]) {
                 colMin = costMatrix[i][j];
             }
         }
-        if (colMin != INT_MAX) {
-            cost += colMin;
-            for (int i = 0; i < N; i++) {
-                if (costMatrix[i][j] != INT_MAX) {
-                    costMatrix[i][j] -= colMin;
-                }
+        colReduction[j] = colMin;
+        cost += colReduction[j];
+        for (int i = 0; i < N; i++) {
+            if (costMatrix[i][j] != INT_MAX && colReduction[j] != INT_MAX) {
+                costMatrix[i][j] -= colReduction[j];
             }
         }
     }
@@ -53,32 +46,53 @@ int reduceMatrix(int costMatrix[N][N]) {
     return cost;
 }
 
-int solveTSP(int costMatrix[N][N]) {
-    int minCost = INT_MAX;
-
-    vector<int> path;
-    path.push_back(0);
-
-    vector<vector<int>> reducedMatrix(N, vector<int>(N));
+int branchAndBoundTSP(int costMatrix[N][N], int currBound, int currWeight, int level, vector<int>& currPath, vector<int>& bestPath, int& minCost) {
+    if (level == N) {
+        if (dist[currPath[level - 1]][currPath[0]] != 0) {
+            int currResult = currWeight + dist[currPath[level - 1]][currPath[0]];
+            if (currResult < minCost) {
+                minCost = currResult;
+                bestPath = currPath;
+                bestPath.push_back(currPath[0]);
+            }
+        }
+        return minCost;
+    }
 
     for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            reducedMatrix[i][j] = costMatrix[i][j];
+        if (find(currPath.begin(), currPath.end(), i) == currPath.end() && dist[currPath[level - 1]][i] != 0) {
+            int temp = currBound;
+            currWeight += dist[currPath[level - 1]][i];
+
+            int rowReduction[N], colReduction[N];
+            int reducedCostMatrix[N][N];
+            copy(&costMatrix[0][0], &costMatrix[0][0] + N * N, &reducedCostMatrix[0][0]);
+
+            int cost = reduceMatrix(reducedCostMatrix, rowReduction, colReduction);
+            currBound = temp + cost;
+            
+            if (currBound + currWeight < minCost) {
+                currPath[level] = i;
+                minCost = branchAndBoundTSP(reducedCostMatrix, currBound, currWeight, level + 1, currPath, bestPath, minCost);
+            }
+
+            currWeight -= dist[currPath[level - 1]][i];
+            currBound = temp;
         }
     }
-
-    minCost = reduceMatrix(reducedMatrix);
-
-    for (int i = 1; i < N; i++) {
-        if (find(path.begin(), path.end(), i) == path.end()) {
-            path.push_back(i);
-            int currentCost = costMatrix[path.back()][i] + solveTSP(costMatrix);
-            minCost = min(minCost, currentCost);
-            path.pop_back();
-        }
-    }
-
     return minCost;
+}
+
+int solveTSP(int costMatrix[N][N]) {
+    vector<int> currPath(N + 1, -1);
+    vector<int> bestPath(N + 1, -1);
+    int currBound = 0;
+    int rowReduction[N], colReduction[N];
+    currBound = reduceMatrix(costMatrix, rowReduction, colReduction);
+    currPath[0] = 0;
+
+    int minCost = INT_MAX;
+    return branchAndBoundTSP(costMatrix, currBound, 0, 1, currPath, bestPath, minCost);
 }
 
 int main() {
