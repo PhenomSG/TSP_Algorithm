@@ -1,9 +1,9 @@
 Solution Approaches
 We explore several methods to solve the TSP, each with its own advantages and trade-offs:
-Link ->
-Link ->
-Link ->
-Link ->
+Link -> https://www.geeksforgeeks.org/traveling-salesman-problem-tsp-implementation/
+Link -> https://www.youtube.com/watch?v=1FEP_sNb62k
+Link -> https://www.youtube.com/watch?v=XaXsJJh-Q5Y
+Link -> https://www.youtube.com/watch?v=e2cF8a5aAhE
 
 1. Dynamic Programming
 Dynamic Programming (DP) breaks the problem into smaller subproblems and stores the results of these subproblems to avoid redundant computations. 
@@ -13,26 +13,27 @@ Link -> https://www.geeksforgeeks.org/travelling-salesman-problem-using-dynamic-
 2. Minimum Spanning Tree (MST)
 Using MST, we can approximate the TSP by finding a minimum spanning tree of the graph and performing a depth-first traversal to generate a Hamiltonian cycle. 
 This approach provides a 2-approximation solution but is not guaranteed to be optimal.
-Link ->
+Link -> https://www.geeksforgeeks.org/approximate-solution-for-travelling-salesman-problem-using-mst/
 
 3. Backtracking
 Backtracking systematically explores all possible permutations of cities to find the optimal tour. While straightforward, this method has a factorial time 
 complexity (O(n!)) and is impractical for large numbers of cities.
-Link ->
+Link -> https://www.geeksforgeeks.org/travelling-salesman-problem-implementation-using-backtracking/
 
 4. Hungarian Method
 The Hungarian Method solves the assignment problem and can be adapted for TSP by converting it into an assignment problem. This method works well for 
 smaller instances but is not directly applicable to TSP without modifications.
+Link -> https://www.geeksforgeeks.org/travelling-salesman-problem-using-hungarian-method/
 
 5. Reduced Matrix Method
 This method involves reducing the cost matrix and iteratively refining it to find the optimal tour. It is an exact method but can be computationally 
 intensive for larger instances.
-Link ->
+Link -> https://www.geeksforgeeks.org/travelling-salesman-problem-tsp-using-reduced-matrix-method/
 
 6. Bitmasking and Dynamic Programming
 Combining bitmasking with DP allows us to represent the state of visited cities efficiently. This method is particularly effective for small to 
 medium-sized instances, with a time complexity of O(n^2 * 2^n).
-Link ->
+Link -> https://www.geeksforgeeks.org/bitmasking-dynamic-programming-set-2-tsp/
 
 7. Branch and Bound
 Branch and Bound systematically explores branches of the search space, using bounds to prune branches that cannot yield better solutions than the current best. 
