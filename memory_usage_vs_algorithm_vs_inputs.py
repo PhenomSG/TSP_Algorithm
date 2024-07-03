@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Define the data based on your inputs
 algorithms = [
