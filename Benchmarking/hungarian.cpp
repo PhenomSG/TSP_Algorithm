@@ -4,15 +4,17 @@
 
 using namespace std;
 
-const int N = 4;
 const int INF = INT_MAX;
 
+const int N = 5; // Number of cities
 int dist[N][N] = {
-    {0, 10, 15, 20},
-    {10, 0, 35, 25},
-    {15, 35, 0, 30},
-    {20, 25, 30, 0}
+    {0, 10, 15, 20, 25},
+    {10, 0, 35, 25, 30},
+    {15, 35, 0, 30, 20},
+    {20, 25, 30, 0, 10},
+    {25, 30, 20, 10, 0}
 };
+
 
 int hungarian() {
     vector<int> u(N, 0), v(N, 0), p(N, 0), way(N, 0);
