@@ -1,0 +1,9 @@
+Approaches ->
+
+1. backtracking.cpp
+2. bitmask_dp.cpp
+3. branch_n_bound.cpp
+4. dp.cpp
+5. hungarian.cpp
+6. mst.cpp
+7. reduced_matrix.cpp

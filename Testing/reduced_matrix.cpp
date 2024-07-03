@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <climits>
+#include <algorithm>
 
 using namespace std;
 
@@ -59,8 +60,7 @@ int solveTSP(int costMatrix[N][N]) {
     vector<int> path;
     path.push_back(0);
 
-    vector<vector<int>> reducedMatrix(N, vector<int>(N));
-
+    int reducedMatrix[N][N];
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             reducedMatrix[i][j] = costMatrix[i][j];
