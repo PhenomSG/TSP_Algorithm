@@ -1,107 +1,108 @@
 #include <iostream>
+#include <chrono>
 #include <vector>
-#include <climits>
-#include <algorithm>
+#include <fstream>
+#include <memory>
+#include <string>
+#include <array>
+#include <cstdlib>
+#include <cstring>
 
-using namespace std;
+#if defined(_WIN32) || defined(_WIN64)
+#include <windows.h>
+#include <psapi.h>
+#else
+#include <sys/resource.h>
+#include <unistd.h>
+#endif
 
-const int N = 4;
-
-int dist[N][N] = {
-    {0, 10, 15, 20},
-    {10, 0, 35, 25},
-    {15, 35, 0, 30},
-    {20, 25, 30, 0}
-};
-
-int reduceMatrix(int costMatrix[N][N], int rowReduction[N], int colReduction[N]) {
-    int cost = 0;
-
-    for (int i = 0; i < N; i++) {
-        rowReduction[i] = *min_element(costMatrix[i], costMatrix[i] + N);
-        cost += rowReduction[i];
-        for (int j = 0; j < N; j++) {
-            if (costMatrix[i][j] != INT_MAX && rowReduction[i] != INT_MAX) {
-                costMatrix[i][j] -= rowReduction[i];
-            }
-        }
+// Function to execute a command and capture its output
+std::string exec(const char* cmd) {
+    std::array<char, 128> buffer;
+    std::string result;
+    std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+    if (!pipe) throw std::runtime_error("popen() failed!");
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        result += buffer.data();
     }
-
-    for (int j = 0; j < N; j++) {
-        int colMin = INT_MAX;
-        for (int i = 0; i < N; i++) {
-            if (costMatrix[i][j] < colMin) {
-                colMin = costMatrix[i][j];
-            }
-        }
-        colReduction[j] = colMin;
-        cost += colReduction[j];
-        for (int i = 0; i < N; i++) {
-            if (costMatrix[i][j] != INT_MAX && colReduction[j] != INT_MAX) {
-                costMatrix[i][j] -= colReduction[j];
-            }
-        }
-    }
-
-    return cost;
+    return result;
 }
 
-int branchAndBoundTSP(int costMatrix[N][N], int currBound, int currWeight, int level, vector<int>& currPath, vector<int>& bestPath, int& minCost) {
-    if (level == N) {
-        if (dist[currPath[level - 1]][currPath[0]] != 0) {
-            int currResult = currWeight + dist[currPath[level - 1]][currPath[0]];
-            if (currResult < minCost) {
-                minCost = currResult;
-                bestPath = currPath;
-                bestPath.push_back(currPath[0]);
-            }
-        }
-        return minCost;
-    }
-
-    for (int i = 0; i < N; i++) {
-        if (find(currPath.begin(), currPath.end(), i) == currPath.end() && dist[currPath[level - 1]][i] != 0) {
-            int temp = currBound;
-            currWeight += dist[currPath[level - 1]][i];
-
-            int rowReduction[N], colReduction[N];
-            int reducedCostMatrix[N][N];
-            copy(&costMatrix[0][0], &costMatrix[0][0] + N * N, &reducedCostMatrix[0][0]);
-
-            int cost = reduceMatrix(reducedCostMatrix, rowReduction, colReduction);
-            currBound = temp + cost;
-            
-            if (currBound + currWeight < minCost) {
-                currPath[level] = i;
-                minCost = branchAndBoundTSP(reducedCostMatrix, currBound, currWeight, level + 1, currPath, bestPath, minCost);
-            }
-
-            currWeight -= dist[currPath[level - 1]][i];
-            currBound = temp;
-        }
-    }
-    return minCost;
+// Function to get the current memory usage of the process
+size_t getCurrentMemoryUsage() {
+#if defined(_WIN32) || defined(_WIN64)
+    PROCESS_MEMORY_COUNTERS memCounter;
+    GetProcessMemoryInfo(GetCurrentProcess(), &memCounter, sizeof(memCounter));
+    return memCounter.PeakWorkingSetSize / 1024; // Convert to KB
+#else
+    struct rusage usage;
+    getrusage(RUSAGE_SELF, &usage);
+    return usage.ru_maxrss; // Memory usage in KB
+#endif
 }
 
-int solveTSP(int costMatrix[N][N]) {
-    vector<int> currPath(N + 1, -1);
-    vector<int> bestPath(N + 1, -1);
-    int currBound = 0;
-    int rowReduction[N], colReduction[N];
-    currBound = reduceMatrix(costMatrix, rowReduction, colReduction);
-    currPath[0] = 0;
+// Function to benchmark a TSP algorithm
+void benchmark(const std::string& file, const std::string& inputFile, const std::string& outputFile, const std::string& qualityFile) {
+    auto start = std::chrono::high_resolution_clock::now();
 
-    int minCost = INT_MAX;
-    return branchAndBoundTSP(costMatrix, currBound, 0, 1, currPath, bestPath, minCost);
+    // Compile and run the algorithm
+    std::string command = "g++ -o algorithm " + file + " && ./algorithm < " + inputFile + " > " + outputFile;
+    std::system(command.c_str());
+
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+
+    size_t memoryUsage = getCurrentMemoryUsage();
+
+    // Read solution quality and path from output file
+    std::ifstream qualityStream(outputFile);
+    std::string line;
+    std::string solutionQuality;
+    std::string solutionPath;
+    while (std::getline(qualityStream, line)) {
+        if (line.find("Minimum cost:") != std::string::npos) {
+            solutionQuality = line;
+        } else if (line.find("Path:") != std::string::npos) {
+            solutionPath = line;
+        }
+    }
+
+    // Log results
+    std::ofstream logFile("benchmark_results.txt", std::ios_base::app);
+    logFile << "Algorithm: " << file << "\n";
+    logFile << "Execution Time: " << duration.count() << " seconds\n";
+    logFile << "Memory Usage: " << memoryUsage << " KB\n";
+    logFile << solutionQuality << "\n";
+    logFile << solutionPath << "\n";
+    logFile << "-------------------------------------\n";
+    logFile.close();
 }
 
 int main() {
-    int costMatrix[N][N] = {
-        {0, 10, 15, 20},
-        {10, 0, 35, 25},
-        {15, 35, 0, 30},
-        {20, 25, 30, 0}
+    std::vector<std::string> files = {
+        "backtracking.cpp",
+        "bitmask_dp.cpp",
+        "branch_n_bound.cpp",
+        "dp.cpp",
+        "hungarian.cpp",
+        "mst.cpp",
+        "reduced_matrix.cpp"
     };
-    cout << "Minimum cost: " << solveTSP(costMatrix) << endl;
+
+    std::string inputFile = "input.txt";
+    std::string outputFile = "output.txt";
+    std::string qualityFile = "quality.txt";
+
+    // Clear previous results
+    std::ofstream logFile("benchmark_results.txt");
+    logFile << "Benchmark Results\n";
+    logFile << "=================\n";
+    logFile.close();
+
+    for (const auto& file : files) {
+        benchmark(file, inputFile, outputFile, qualityFile);
+    }
+
+    std::cout << "Benchmarking completed. Results are in benchmark_results.txt" << std::endl;
     return 0;
 }

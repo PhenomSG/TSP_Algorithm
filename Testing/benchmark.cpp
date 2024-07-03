@@ -4,10 +4,17 @@
 #include <fstream>
 #include <memory>
 #include <string>
-#include <sys/resource.h>
-#include <unistd.h>
+#include <array>
 #include <cstdlib>
 #include <cstring>
+
+#if defined(_WIN32) || defined(_WIN64)
+#include <windows.h>
+#include <psapi.h>
+#else
+#include <sys/resource.h>
+#include <unistd.h>
+#endif
 
 // Function to execute a command and capture its output
 std::string exec(const char* cmd) {
@@ -23,16 +30,22 @@ std::string exec(const char* cmd) {
 
 // Function to get the current memory usage of the process
 size_t getCurrentMemoryUsage() {
+#if defined(_WIN32) || defined(_WIN64)
+    PROCESS_MEMORY_COUNTERS memCounter;
+    GetProcessMemoryInfo(GetCurrentProcess(), &memCounter, sizeof(memCounter));
+    return memCounter.PeakWorkingSetSize / 1024; // Convert to KB
+#else
     struct rusage usage;
     getrusage(RUSAGE_SELF, &usage);
-    return usage.ru_maxrss;
+    return usage.ru_maxrss; // Memory usage in KB
+#endif
 }
 
 // Function to benchmark a TSP algorithm
 void benchmark(const std::string& file, const std::string& inputFile, const std::string& outputFile, const std::string& qualityFile) {
     auto start = std::chrono::high_resolution_clock::now();
 
-    // Run the algorithm
+    // Compile and run the algorithm
     std::string command = "g++ -o algorithm " + file + " && ./algorithm < " + inputFile + " > " + outputFile;
     std::system(command.c_str());
 
