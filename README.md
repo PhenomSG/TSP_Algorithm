@@ -92,8 +92,8 @@ The choice of method depends on the specific requirements of the problem instanc
 
 ## Usage
 To run the algorithms, follow these steps:
-1. Clone the repository: `git clone https://github.com/yourusername/tsp-solutions.git`
-2. Navigate to the project directory: `cd tsp-solutions`
+1. Clone the repository: `git clone https://github.com/PhenomSG/TSP_Algorithm.git`
+2. Navigate to the project directory: `cd TSP_Algorithm`
 3. Follow the instructions in the `setup.md` file to set up the environment.
 4. Run the desired algorithm using the provided scripts in the `scripts` directory.
 
